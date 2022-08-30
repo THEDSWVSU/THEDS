@@ -1,5 +1,7 @@
 import React, { useState } from 'react'
+import axios from 'axios'
 
+const base_url = "http://192.168.254.114:4000"
 export default function useRegister() {
   const [firstname, setFirstname] = useState("")
   const [middlename, setMiddlename] = useState("")
@@ -13,35 +15,50 @@ export default function useRegister() {
   const [retypePassword, setRetypePassword] = ("")
 
 
-  const handleFirstname=(input)=>{
+  const handleFirstname = (input) => {
+    console.log(input)
     setFirstname(input)
   }
-  const handleMiddlename=(input)=>{
+  const handleMiddlename = (input) => {
     setMiddlename(input)
+    console.log(input)
   }
-  const handleLastname=(input)=>{
+  const handleLastname = (input) => {
     setLastname(input)
+    console.log(input)
   }
-  const handleGender=(input)=>{
+  const handleGender = (input) => {
     setGender(input)
   }
-  const handleAge=(input)=>{
+  const handleAge = (input) => {
     setAge(input)
   }
-  const handleBirthday =(input)=>{
+  const handleBirthday = (input) => {
     setBirthday(input)
   }
-  const handlePhone = (input) =>{
+  const handlePhone = (input) => {
     setPhone(input)
   }
-  const handleUsername = (input) =>{
+  const handleUsername = (input) => {
     setUsername(input)
   }
-  const handlePassword = (input) =>{
+  const handlePassword = (input) => {
     setPassword(input)
   }
-  const handleRetypePassword =(input) => {
+  const handleRetypePassword = (input) => {
     setRetypePassword(input)
+  }
+
+  const submit = async() => {
+    console.log("Submiting")
+    const registerRequest = await axios.post(base_url + "/passenger/register", {
+      firstname,
+      middlename,
+      lastname
+    })
+
+    console.log(registerRequest.headers)
+
   }
 
   return {
@@ -54,6 +71,7 @@ export default function useRegister() {
     username, handleUsername,
     phone, handlePhone,
     password, handlePassword,
-    retypePassword, handleRetypePassword
-}
+    retypePassword, handleRetypePassword,
+    submit
+  }
 }
