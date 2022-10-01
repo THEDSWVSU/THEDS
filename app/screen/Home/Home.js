@@ -16,11 +16,15 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import Trips from "./screens/Trips/Trips";
 import CreateTrip from "./screens/createTrip/CreateTrip";
+import useHome from "./useHome";
 
 const Stack = createStackNavigator();
 export default function Home({ navigation }) {
 
   const MenuPanel = ({navigation}) => {
+
+    const {logout} = useHome(navigation)
+    
     return (
       <View style={styles.menu}>
         
@@ -30,12 +34,7 @@ export default function Home({ navigation }) {
         <View style={styles.itemContainer}>
         <Text style={styles.menuItem}>Settings</Text>
         </View>
-        <View style={styles.itemContainer} onTouchStart = {()=>navigation.reset({
-          index:0,
-          routes:[
-            {name:"main"}
-          ]
-        })}>
+        <View style={styles.itemContainer} onTouchStart = {logout}>
         <Text style={styles.menuItem}>Logout</Text>
         </View>
       </View>

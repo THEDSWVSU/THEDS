@@ -1,28 +1,37 @@
 import { StyleSheet, Text, View, StatusBar, TextInput, Button, Alert, ScrollView } from 'react-native'
 import React from 'react'
+import useDriver from './useDriver'
 
-export default function DriverRegister() {
-  return (
+export default function DriverRegister({navigation}) {
+
+  const {
+    username, handleUsername,
+    password, handlePassword,
+    motorBrand, handleMotorBrand,
+    model, handleModel,
+    cc, handleCC,
+    plate, handlePlate,
+    color, handleColor,
+    submit
+  } = useDriver(navigation)
+    return (
     <ScrollView style={styles.scroll}>
     <View style = {styles.body}>
 
-      <Text style = {styles.title}>REGISTER</Text>
+      <Text style = {styles.title}>DRIVER APPLICATION</Text>
 
       <View style = {styles.inputGroup}>
-        <TextInput style = {styles.input} placeholder = "Firstname:"></TextInput>
-        <TextInput style = {styles.input} placeholder = "Middlename:"></TextInput>
-        <TextInput style = {styles.input} placeholder = "Lastname:"></TextInput>
-        <TextInput style = {styles.input} placeholder = "Age:"></TextInput>
-        <TextInput style = {styles.input} placeholder = "Birthday:"></TextInput>
-        <TextInput style = {styles.input} placeholder = "Gender:"></TextInput>
-        <TextInput style = {styles.input} placeholder = "Phone Number:"></TextInput>
-        <TextInput style = {styles.input} placeholder = "Plate Number:"></TextInput>
-        <TextInput style = {styles.input} placeholder = "Username:"></TextInput>
-        <TextInput style = {styles.input} placeholder = "Password:"></TextInput>
-        <TextInput style = {styles.input} placeholder = "Retype Password:"></TextInput>
+        <TextInput style = {styles.input} placeholder = "Username:" defaultValue={username} onChangeText = {handleUsername}></TextInput>
+        <TextInput style = {styles.input} placeholder = "Password:" defaultValue={password} onChangeText = {handlePassword}></TextInput>
+        <TextInput style = {styles.input} placeholder = "Motorcycle brand:" defaultValue={motorBrand} onChangeText = {handleMotorBrand}></TextInput>
+        <TextInput style = {styles.input} placeholder = "Model:" defaultValue={model} onChangeText = {handleModel}></TextInput>
+        <TextInput style = {styles.input} placeholder = "Engine cc:" defaultValue={cc} onChangeText = {handleCC}></TextInput>
+        <TextInput style = {styles.input} placeholder = "Plate number:" defaultValue={plate} onChangeText = {handlePlate}></TextInput>
+        <TextInput style = {styles.input} placeholder = "Color:" defaultValue={color} onChangeText = {handleColor}></TextInput>
 
 
-        <Button title='Lets Go' onPress={()=>Alert.alert("Login me")}/>
+
+        <Button title='submit' onPress={submit}/>
 
 
 

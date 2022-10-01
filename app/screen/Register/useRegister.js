@@ -1,40 +1,41 @@
 import React, { useState } from 'react'
 import axios from 'axios'
+import { DateTimePickerAndroid } from "@react-native-community/datetimepicker";
+import { Alert } from 'react-native';
 
-const base_url = "http://192.168.254.114:4000"
-export default function useRegister() {
+import { API_BASE_URL } from '../../../config';
+
+export default function useRegister(navigation) {
   const [firstname, setFirstname] = useState("")
   const [middlename, setMiddlename] = useState("")
   const [lastname, setLastname] = useState("")
   const [age, setAge] = useState("")
-  const [gender, setGender] = useState("")
-  const [birthday, setBirthday] = useState("")
+  const [gender, setGender] = useState("Male")
+  const [birthday, setBirthday] = useState(new Date());
   const [phone, setPhone] = useState("")
   const [username, setUsername] = useState("")
   const [password, setPassword] = useState("")
-  const [retypePassword, setRetypePassword] = ("")
+  const [retypePassword, setRetypePassword] = useState("")
 
 
   const handleFirstname = (input) => {
-    console.log(input)
     setFirstname(input)
   }
   const handleMiddlename = (input) => {
     setMiddlename(input)
-    console.log(input)
   }
   const handleLastname = (input) => {
     setLastname(input)
-    console.log(input)
   }
-  const handleGender = (input) => {
-    setGender(input)
+  const handleGender = (value, index) => {
+    setGender(value)
   }
   const handleAge = (input) => {
     setAge(input)
   }
-  const handleBirthday = (input) => {
-    setBirthday(input)
+  const handleBirthday = (event, selectedDate) => {
+    const currentDate = selectedDate;
+    setBirthday(currentDate)
   }
   const handlePhone = (input) => {
     setPhone(input)
@@ -49,17 +50,45 @@ export default function useRegister() {
     setRetypePassword(input)
   }
 
+  const showMode = (currentMode) => {
+    DateTimePickerAndroid.open({
+      value: birthday,
+      onChange:handleBirthday,
+      mode: currentMode,
+      is24Hour: false,
+    });
+  };
+
+  const showDatepicker = () => {
+    showMode("date");
+  };
+
   const submit = async() => {
-    console.log("Submiting")
-    const registerRequest = await axios.post(base_url + "/passenger/register", {
-      firstname,
-      middlename,
-      lastname
-    })
-
-    console.log(registerRequest.headers)
-
-  }
+    if(password != retypePassword){
+      Alert.alert("Password Error", "Your password does not match.")
+      return 0
+    }
+      const registerRequest = await axios.post(API_BASE_URL + "/account/register", {
+        firstname,
+        middlename,
+        lastname,
+        age,
+        gender,
+        birthday,
+        phone,
+        username,
+        password
+      })
+      if(registerRequest.status != 200){
+        Alert.alert("Try again", "Sorry something went wrong")
+        return 0
+      }
+      if(registerRequest.data.status === "success"){
+        Alert.alert("Success", "You have been successfully registered")
+        navigation.navigate("main")
+        return 0
+      }
+    }
 
   return {
     firstname, handleFirstname,
@@ -72,6 +101,8 @@ export default function useRegister() {
     phone, handlePhone,
     password, handlePassword,
     retypePassword, handleRetypePassword,
+
+    showDatepicker,
     submit
   }
 }

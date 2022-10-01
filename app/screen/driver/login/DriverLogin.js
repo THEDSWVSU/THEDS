@@ -10,7 +10,12 @@ import {
     Button,
   } from "react-native";
   import React from "react";
-    export default function DriverLogin(props) {
+import useDriverLogin from "./useDriverLogin";
+    export default function DriverLogin({navigation}) {
+
+    const {username, handleUsername, password, handlePassword, submit} = useDriverLogin(navigation)
+
+    
     return (
       <View style={styles.body}>
         <Image
@@ -21,34 +26,25 @@ import {
         <Text style={styles.title}>THEDS DRIVER</Text>
   
         <View style={styles.inputGroup}>
-          <TextInput style={styles.input} placeholder="Username:"></TextInput>
-          <TextInput style={styles.input} placeholder="Password:"></TextInput>
+          <TextInput style={styles.input} placeholder="Username:" defaultValue={username} onChangeText = {handleUsername}></TextInput>
+          <TextInput style={styles.input} placeholder="Password:" defaultValue={password} onChangeText = {handlePassword}></TextInput>
         </View>
         <View style={styles.buttonGroup}>
         <Button
           style={styles.button}
           title="Login"
-          onPress={() =>
-            props.navigation.reset({
-              index: 0,
-              routes: [
-                {
-                  name: "home",
-                },
-              ],
-            })
-          }
+          onPress={submit}
         />
         
         </View>
         
         <View style={styles.buttonGroup}>
-        <View style={styles.info}><Text style={styles.infoText}>Don't have an account yet?</Text></View>
+        <View style={styles.info}><Text style={styles.infoText}>Have you already applied for driver?</Text></View>
         <Button
           style={styles.button}
-          title="Register Here"
+          title="Apply Here"
           onPress={() =>
-            props.navigation.navigate("driver-register")
+            navigation.navigate("driver-register")
           }
         />
         

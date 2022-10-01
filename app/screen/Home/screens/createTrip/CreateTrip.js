@@ -2,7 +2,7 @@ import { StyleSheet, Text, View, TextInput, Button, Dimensions } from 'react-nat
 import React from 'react'
 import MapView, { PROVIDER_GOOGLE } from 'react-native-maps'
 
-import { MAP_KEY } from '../../../../../mapskey'
+import { MAP_KEY } from '../../../../../config' 
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete'
 
 export default function CreateTrip() {

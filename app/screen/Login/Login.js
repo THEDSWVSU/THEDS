@@ -1,47 +1,36 @@
 import {
   Image,
-  StyleSheet,
   Text,
   View,
-  Platform,
-  StatusBar,
-  Alert,
   TextInput,
   Button,
 } from "react-native";
 import React from "react";
 
 import { styles } from "./styles.js";
-export default function Login(props) {
+import useLogin from "./useLogin.js";
+export default function Login({navigation}) {
+
+  const {username, handleUsername,password, handlePassword, submit} = useLogin(navigation)
   return (
     <View style={styles.body}>
       <Image
         source={require("../../assets/philippines-tricycle-clipart-png-transparent.png")}
         style={styles.logo}
       />
-
       <Text style={styles.title}>Login</Text>
 
       <View style={styles.inputGroup}>
-        <TextInput style={styles.input} placeholder="Username:"></TextInput>
-        <TextInput style={styles.input} placeholder="Password:"></TextInput>
+        <TextInput style={styles.input} placeholder="Username:" defaultValue={username} onChangeText = {handleUsername}></TextInput>
+        <TextInput style={styles.input} placeholder="Password:" defaultValue= {password} onChangeText = {handlePassword}></TextInput>
       </View>
       <View style={styles.buttonGroup}>
         <Button
           style={styles.button}
           title="Let's go"
-          onPress={() =>
-            props.navigation.reset({
-              index: 0,
-              routes: [
-                {
-                  name: "home",
-                },
-              ],
-            })
-          }
+          onPress={submit}
         />
-        
+      
         </View>
     </View>
   );
