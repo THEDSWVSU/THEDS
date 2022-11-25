@@ -1,62 +1,94 @@
-import { StyleSheet, Text, View, StatusBar } from 'react-native'
-import React from 'react'
-import useDriverHome from './useDriverHome';
+import {
+  Dimensions,
+  ScrollView,
+  StatusBar,
+  StyleSheet,
+  Text,
+  View,
+  TextInput,
+  Button,
+  Image,
+} from "react-native";
+import React, { useEffect, useState } from "react";
+import { Appbar, Divider, Provider, Menu } from "react-native-paper";
+import { NavigationContainer } from "@react-navigation/native";
+import {createBottomTabNavigator} from '@react-navigation/bottom-tabs'
 import { createStackNavigator } from "@react-navigation/stack";
-import DriverTrips from '../DriverTrips/DriverTrips';
+import DriverDelivery from "./DriverDelivery";
+import DriverTrips from "./DriverTrips";
+import TripsQue from "./TripsQue";
+import storage from "../../../helder/storage";
 
-export default function DriverHome({navigation}) {
-    const Stack = createStackNavigator();
+const Tab = createBottomTabNavigator();
 
+export default function DriverHome({ navigation }) {
 
-    const MenuPanel = ({navigation}) => {
-        const {logout} = useDriverHome(navigation)
-
-        return (
-          <View style={styles.menu}>
-            
-            <View style={styles.itemContainer}>
-            <Text style={styles.menuItem}>Profile</Text>
-            </View>
-            <View style={styles.itemContainer}>
-            <Text style={styles.menuItem}>Settings</Text>
-            </View>
-            <View style={styles.itemContainer} onTouchStart = {logout}>
-            <Text style={styles.menuItem}>Logout</Text>
-            </View>
-          </View>
-        );
-      }; 
+  const {save} = storage()
+  const MenuPanel = ({navigation}) => {
+    const logout = () => {
+      save("accountId", "")
+      save("userType", "")
+      navigation.reset({
+        index:0,
+        routes:[
+          {name:"main"}
+        ]
+      })
+    }
     return (
-        <Stack.Navigator initialRouteName="driver-trips">
-          <Stack.Screen
-            name="driver-trips"
-            component={DriverTrips}
-          />
-          <Stack.Screen name="menu" component={MenuPanel} />
-          {/* <Stack.Screen name="new-trip" component={CreateTrip} options={{title:"Create Trip"}}
-          /> */}
-        </Stack.Navigator>
+      <View style={styles.menu}>
+        
+        <View style={styles.itemContainer}>
+        <Text style={styles.menuItem}>Profile</Text>
+        </View>
+        <View style={styles.itemContainer}>
+        <Text style={styles.menuItem}>Settings</Text>
+        </View>
+        <View style={styles.itemContainer} onTouchStart = {logout}>
+        <Text style={styles.menuItem}>Logout</Text>
+        </View>
+      </View>
     );
+  };
+  return (
+      <Tab.Navigator initialRouteName="driver-trips">
+        <Tab.Screen
+          name="driver-trips"
+          component={DriverTrips}
+          options = {{
+            title:"Hailing",
+        }}
+        />
+        <Tab.Screen name="delivery" component={DriverDelivery} options = {{
+          title:"Delivery",
+          }}/>
+          <Tab.Screen name="trips-que" component={TripsQue} options = {{
+          title:"Trips Que"
+          }}/>
+        <Tab.Screen name="menu" component={MenuPanel} options={{title:"Menu"}}
+        />
+      </Tab.Navigator>
+  );
 }
-
 const styles = StyleSheet.create({
-    menu: {
-        flex: 1,
-        justifyContent:"flex-start",
-        alignItems: "center",
-        paddingTop:StatusBar.currentHeightm,
-        padding:10
-      },
-      itemContainer:{
-        width:"100%",
-        padding:10,
-        borderWidth:1,
-        borderColor:"#BDBDBD",
-        borderRadius:5,
-        marginBottom:5
-    
-      },
-      menuItem:{
-        fontSize:15,
-      },
-})
+  menu: {
+    flex: 1,
+    justifyContent:"flex-start",
+    alignItems: "center",
+    paddingTop:StatusBar.currentHeightm,
+    padding:10
+  },
+  itemContainer:{
+    width:"100%",
+    padding:10,
+    borderWidth:1,
+    borderColor:"#BDBDBD",
+    borderRadius:5,
+    marginBottom:5
+
+  },
+  menuItem:{
+    fontSize:15,
+  },
+
+});

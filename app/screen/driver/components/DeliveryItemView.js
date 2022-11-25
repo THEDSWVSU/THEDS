@@ -1,33 +1,14 @@
-import { StyleSheet, Text, View, TextInput, Button, Dimensions, Alert } from 'react-native'
+import { StyleSheet, Text, View, TextInput, Button, Dimensions } from 'react-native'
 import React, {useState} from 'react'
 import MapView, { PROVIDER_GOOGLE } from 'react-native-maps'
 
-import { MAP_KEY } from '../../../../../config' 
-import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete'
-import storage from '../../../../helder/storage'
-import axios from 'axios'
-import { API_BASE_URL } from '../../../../../config'
 
-export default function CreateTrip({navigation}) {
+export default function DeliveryItemView({route,navigation}) {
   const [origin, setOrigin] = useState("")
   const [destination, setDestination] = useState("")
-  const [pickupTime, setPickupTime] = useState("")
 
-  const {getValueFor} = storage()
+  const data = route.params.data
 
-
-
-  const submit = async() => {
-      const passengerId = await getValueFor('accountId')
-      console.log("passenger id",passengerId)
-      const reqDelivery = await axios.post(API_BASE_URL+"/passenger/requestRide",{origin:origin, destination:destination, time:pickupTime, passengerId:passengerId})
-      const deliveryData = reqDelivery.data
-      if(deliveryData.success){
-        Alert.alert("Success!","Your booking has been submitted.")
-        navigation.navigate("hailings")
-      }
-      else Alert.alert("Failed!","Cannot submit your booking.")
-  }
   const handleOrigin = (e) => {
     setOrigin(e)
   }
@@ -65,24 +46,13 @@ export default function CreateTrip({navigation}) {
         defaultValue={destination}
         onChangeText={handleDestination}/>
       </View>
-      <View style={styles.inputGroup}>
-        <Text>Time to Pickup</Text>
-        <TextInput
-        style={styles.input}
-        placeholder="Time"
-        defaultValue={pickupTime}
-        onChangeText={(e)=>setPickupTime(e)}/>
-      </View>
-      {/* <View style={styles.inputGroup}>
-        <Text>Fare: PHP. 20</Text>
-      </View> */}
       <View style={styles.mapView}>
         <MapView style={styles.map} provider={PROVIDER_GOOGLE}>
           
         </MapView>
       </View>
       <View style={styles.footer}>
-        <Button title="Create" onPress={submit}/>
+        <Button title="Accept" onPress={acceptTrip}/>
       </View>
     </View>
   )

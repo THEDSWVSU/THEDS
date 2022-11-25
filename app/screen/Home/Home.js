@@ -13,12 +13,15 @@ import React, { useEffect, useState } from "react";
 import { Appbar, Divider, Provider, Menu } from "react-native-paper";
 import TripItem from "./components/tripItem/TripItem";
 import { NavigationContainer } from "@react-navigation/native";
+import {createBottomTabNavigator} from '@react-navigation/bottom-tabs'
 import { createStackNavigator } from "@react-navigation/stack";
 import Trips from "./screens/Trips/Trips";
 import CreateTrip from "./screens/createTrip/CreateTrip";
 import useHome from "./useHome";
+import Delivery from "./screens/delivery/Delivery";
+import Notification from "./screens/Notification";
 
-const Stack = createStackNavigator();
+const Tab = createBottomTabNavigator();
 export default function Home({ navigation }) {
 
   const MenuPanel = ({navigation}) => {
@@ -41,15 +44,29 @@ export default function Home({ navigation }) {
     );
   };
   return (
-      <Stack.Navigator initialRouteName="trips">
-        <Stack.Screen
+      <Tab.Navigator initialRouteName="trips">
+        <Tab.Screen
           name="trips"
           component={Trips}
+          options = {{
+            title:"Hailing",
+            headerShown:false}}
         />
-        <Stack.Screen name="menu" component={MenuPanel} />
-        <Stack.Screen name="new-trip" component={CreateTrip} options={{title:"Create Trip"}}
+        
+        <Tab.Screen name="delivery" component={Delivery} options = {{
+          title:"Delivery",
+          headerShown:false}}/>
+
+<Tab.Screen
+          name="notification"
+          component={Notification}
+          options = {{
+            title:"Notification",
+          }}
         />
-      </Stack.Navigator>
+        <Tab.Screen name="menu" component={MenuPanel} options={{title:"Menu"}}
+        />
+      </Tab.Navigator>
   );
 }
 const styles = StyleSheet.create({

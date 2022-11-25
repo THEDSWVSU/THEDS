@@ -14,19 +14,21 @@ import { Appbar, Divider, Provider, Menu } from "react-native-paper";
 import TripItem from "../../components/tripItem/TripItem"
 import CreateTrip from "../createTrip/CreateTrip";
 import { createStackNavigator } from "@react-navigation/stack";
-import TripHome from "./TripHome";
+import RequestDelivery from "./RequestDelivery";
+import DeliveryHome from "./DeliveryHome";
 
 const Stack = createStackNavigator();
 
-export default function Trips({navigation}) {
+export default function Delivery({navigation}) {
     return(
-      <Stack.Navigator initialRouteName="hailings">
+      <Stack.Navigator initialRouteName="delivery-feeds">
+      
+      <Stack.Screen name="delivery-feeds" component={DeliveryHome} options = {{title:"Delivery"}}/>
       <Stack.Screen
-        name="new-trip"
-        component={CreateTrip}
-        options = {{title:"Create Trip"}}
+        name="new-delivery"
+        component={RequestDelivery}
+        options = {{title:"Request Delivery"}}
       />
-      <Stack.Screen name="hailings" component={TripHome} options = {{title:"Hailing"}}/>
     </Stack.Navigator>
     )
   } 
