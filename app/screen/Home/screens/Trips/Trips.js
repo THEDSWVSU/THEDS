@@ -15,6 +15,8 @@ import TripItem from "../../components/tripItem/TripItem"
 import CreateTrip from "../createTrip/CreateTrip";
 import { createStackNavigator } from "@react-navigation/stack";
 import TripHome from "./TripHome";
+import TripDetails from "../../components/TripDetails/TripDetails";
+import ConfirmTrip from "../createTrip/ConfirmTrip";
 
 const Stack = createStackNavigator();
 
@@ -27,6 +29,7 @@ export default function Trips({navigation}) {
         options = {{title:"Create Trip"}}
       />
       <Stack.Screen name="hailings" component={TripHome} options = {{title:"Hailing"}}/>
+      <Stack.Screen name="trip-details" component={ConfirmTrip} options = {{title:"Confirm Booking"}}/>
     </Stack.Navigator>
     )
   } 

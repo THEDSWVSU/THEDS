@@ -41,7 +41,7 @@ export default function TripItem({ data, type, action }) {
   if(type === "hailing"){
     return(
       <View style={styles.main}>
-        <View style={styles.row}>
+        <View style={styles.details}>
           <Text style={styles.title}>
             {data.origin} to {data.destination}
           </Text>
@@ -62,8 +62,9 @@ export default function TripItem({ data, type, action }) {
         <Text style={styles.subtitle}>Package: {data.pakage}</Text>
         <Text style={styles.date}>Pickup: {data.pickup_time}</Text>
       </View>
-      <View style={styles.row}>
-          <Button title="Cancel" onPress={()=>action(data)} />
+      <View style={styles.action}>
+          <Button title="Cancel" color="#ee4f00" onPress={()=>action(data)}  />
+          <Button title="Confirm" color={"#eb8d26"}onPress={confirm}/>
       </View>
     </View>
   );
@@ -86,6 +87,9 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
 
+  details:{
+    width:"70%",
+  },  
   content: {
     flex:0,
     flexWrap:"wrap",
