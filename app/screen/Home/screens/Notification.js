@@ -32,12 +32,11 @@ export default function Notification({navigation}) {
     const requestData = requesPt.data
 
     setDeliveries(requestData)
-    console.log(requestData)
   }
 
   useFocusEffect(useCallback(()=>{
     fetchDeliveries()
-  },[]))
+  },[navigation]))
 
 
       return(
@@ -45,7 +44,7 @@ export default function Notification({navigation}) {
         <ScrollView>
           <View style={styles.body}>
             {deliveries.map((data, idx)=>(
-            <TripItem data = {data} key = {idx} type = "notification" />
+            <TripItem data = {data} key = {idx} type = "notification" navigation={navigation}/>
 ))}
       
           </View>

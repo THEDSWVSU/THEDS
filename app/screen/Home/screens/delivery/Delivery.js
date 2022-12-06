@@ -16,6 +16,7 @@ import CreateTrip from "../createTrip/CreateTrip";
 import { createStackNavigator } from "@react-navigation/stack";
 import RequestDelivery from "./RequestDelivery";
 import DeliveryHome from "./DeliveryHome";
+import DeliveryRequestDetails from "./DeliveryRequestDetails";
 
 const Stack = createStackNavigator();
 
@@ -28,6 +29,11 @@ export default function Delivery({navigation}) {
         name="new-delivery"
         component={RequestDelivery}
         options = {{title:"Request Delivery"}}
+      />
+      <Stack.Screen
+      name="delivery-request-details"
+      component={DeliveryRequestDetails}
+      options = {{title:"Confirm Delivery Booking"}}
       />
     </Stack.Navigator>
     )

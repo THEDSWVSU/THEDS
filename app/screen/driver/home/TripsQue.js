@@ -30,9 +30,6 @@ export default function TripsQue({navigation}) {
       const driver = await getValueFor("accountId")
         const tripReq = await axios.post(API_BASE_URL+'/driver/getQue',{driver})
         const tripData = tripReq.data
-
-        console.log("Trip Data",tripData)
-
         if(tripData.success){
             setTrips(tripData.data)
         }
@@ -47,7 +44,7 @@ export default function TripsQue({navigation}) {
           
           <View style={styles.body}>
             {trips.map((data, idx)=>(
-                <QueItem data = {data} key = {idx}  type = "delivery"/>
+                <QueItem data = {data} key = {idx}  type = {data.type}/>
             ))}
       
           </View>

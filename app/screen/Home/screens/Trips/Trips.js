@@ -17,6 +17,7 @@ import { createStackNavigator } from "@react-navigation/stack";
 import TripHome from "./TripHome";
 import TripDetails from "../../components/TripDetails/TripDetails";
 import ConfirmTrip from "../createTrip/ConfirmTrip";
+import TripView from "../TripView/TripView";
 
 const Stack = createStackNavigator();
 
@@ -28,8 +29,11 @@ export default function Trips({navigation}) {
         component={CreateTrip}
         options = {{title:"Create Trip"}}
       />
+
       <Stack.Screen name="hailings" component={TripHome} options = {{title:"Hailing"}}/>
       <Stack.Screen name="trip-details" component={ConfirmTrip} options = {{title:"Confirm Booking"}}/>
+      <Stack.Screen name="trip-view" component={TripView} options = {{title:"Trip Details"}}/>
+
     </Stack.Navigator>
     )
   } 

@@ -8,7 +8,7 @@ export default function QueItem({data, type, view}) {
 
   useEffect(()=>{
     const getData = async()=>{
-      const fetchData = await axios.post(API_BASE_URL+"/driver/getTripDetails/"+data.type,{tripId:data.service_id, driver:data.driver})
+      const fetchData = await axios.post(API_BASE_URL+"/driver/getTripDetails/"+type,{tripId:data.service_id, driver:data.driver})
       const tripData = fetchData.data
       console.log("tripData",tripData)
       setDetails(tripData)
@@ -18,14 +18,15 @@ export default function QueItem({data, type, view}) {
   },[])
   if(details)return (
     <View style={styles.main}>
-      <View style={styles.row}>
+      <View style={styles.details}>
+        <Text style = {styles.title}>{type.toUpperCase()} BOOKING</Text>
         <Text style={styles.title}>{details.firstname + " " + details.middlename + " " + details.lastname}</Text>
         <Text style={styles.subtitle}>Distination: {details.origin} to {details.destination}</Text>
         <Text style={styles.subtitle}>Pickup Time: {details.pickup_time}</Text>
         <Text style={styles.date}>{details.date_time}</Text>
       </View>
       <View style={styles.row}>
-        <Text>Type: {type}</Text>
+        <Button title = "Start"/>
       </View>
     </View>
   )
@@ -51,6 +52,9 @@ const styles = StyleSheet.create({
   date: {
     fontSize: 12,
     color: "#757575",
+  },
+  details:{
+    width:"75%"
   },
   row: {},
 });
