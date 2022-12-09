@@ -17,6 +17,7 @@ import { API_BASE_URL } from "../../../../../config";
 
 import { MAP_KEY } from "../../../../../config";
 import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
+import MapViewDirections from "react-native-maps-directions";
 navigator.geolocation = require("expo-location");
 
 export default function CreateTrip({ navigation }) {
@@ -149,6 +150,19 @@ export default function CreateTrip({ navigation }) {
         >
           {originCords ? <Marker coordinate={originCords} pinColor="green" /> : ""}
           {distCords ? <Marker coordinate={distCords} /> : ""}
+
+          {origin && distCords ? (
+            <MapViewDirections
+              origin={origin}
+              destination={distCords}
+              apikey={MAP_KEY}
+              mode={"DRIVING"}
+              strokeWidth={5}
+              strokeColor="green"
+            />
+          ) : (
+            ""
+          )}
           
         </MapView>
       </View>

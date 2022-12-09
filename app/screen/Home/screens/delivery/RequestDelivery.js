@@ -17,6 +17,7 @@ import { API_BASE_URL } from "../../../../../config";
 
 import { MAP_KEY } from "../../../../../config";
 import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
+import MapViewDirections from "react-native-maps-directions";
 navigator.geolocation = require("expo-location");
 
 export default function CreateTrip({ navigation }) {
@@ -124,12 +125,14 @@ export default function CreateTrip({ navigation }) {
           </View>
           <View style={styles.label}>
             <Text style={styles.h1}>Large Luggage</Text>
+            <Text>30 to 50 kgs</Text>
           </View>
           <View style={styles.inputGroup}>
             <QuantitiySelect state={largeLuggage} setState={setLargeLuggage} />
           </View>
           <View style={styles.label}>
             <Text style={styles.h1}>Medium Luggage</Text>
+            <Text> 15 to 29 kgs</Text>
           </View>
           <View style={styles.inputGroup}>
             <QuantitiySelect
@@ -139,6 +142,7 @@ export default function CreateTrip({ navigation }) {
           </View>
           <View style={styles.label}>
             <Text style={styles.h1}>Small Luggage</Text>
+            <Text>under 15 kgs</Text>
           </View>
           <View style={styles.inputGroup}>
             <QuantitiySelect state={smallLuggage} setState={setSmallLuggage} />
@@ -203,6 +207,19 @@ export default function CreateTrip({ navigation }) {
             ""
           )}
           {distCords ? <Marker coordinate={distCords} /> : ""}
+          {origin && distCords ? (
+            <MapViewDirections
+              origin={origin}
+              destination={distCords}
+              apikey={MAP_KEY}
+              mode={"DRIVING"}
+              strokeWidth={5}
+              strokeColor="green"
+            />
+          ) : (
+            ""
+          )}
+          
         </MapView>
       </View>
       <View style={styles.footer}>

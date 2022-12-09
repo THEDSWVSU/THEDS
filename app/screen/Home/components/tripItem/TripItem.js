@@ -23,15 +23,22 @@ export default function TripItem({ data, type, action, navigation }) {
   }
   if (type === "notification") {
     if (details) {
+      const status = data.notif_status
       return (
         <View style={data.seen?styles.main:styles.darkMen} onTouchEnd = {viewNotif}>
           <View style={styles.col}>
-            <Text style={styles.title}>Booking Accepted </Text>
+            <Text style={styles.title}>
+              {status === "arrived"?"Your Driver has Arrived.":""}
+            {status === "starting"?"Your Driver is on the way.":""} 
+            {status === "done"?"Arrived at Destination.":""}
+            {status === "accepted"?"Booking Accepted.":""}
+            </Text>
             <Text style={styles.contentText}>
               Your {data.type} booking for {details.origin} to{" "}
-              {details.destination} has been acccepted by Rider :
+              {details.destination}
             </Text>
             <Text style={styles.contentBold}>
+              Driver: 
               {details.firstname +
                 " " +
                 details.middlename +

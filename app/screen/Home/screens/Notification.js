@@ -18,43 +18,55 @@ import axios from "axios";
 import storage from "../../../helder/storage";
 import TripItem from "../components/tripItem/TripItem";
 import { useFocusEffect } from "@react-navigation/native";
+import TripView from "./TripView/TripView";
 const Stack = createStackNavigator();
 
 export default function Notification({navigation}) {
-  const [deliveries, setDeliveries] = useState([]);
-  const {getValueFor} = storage()
 
+  return(
+    <Stack.Navigator initialRouteName="notificationList">
+      <Stack.Screen name="notificationList" component={NotificationList} options={{title:"Notification"}}/>
+      <Stack.Screen name="trip-view" component={TripView} options = {{title:"Trip Details"}}/>
 
-  const fetchDeliveries = async()=> {
-    const accountId  = await getValueFor("accountId")
-    const requesPt = await axios.post(API_BASE_URL+"/passenger/getNotification",{accountId})
-    
-    const requestData = requesPt.data
-
-    setDeliveries(requestData)
+    </Stack.Navigator>
+  )
   }
+    
 
-  useFocusEffect(useCallback(()=>{
-    fetchDeliveries()
-  },[navigation]))
-
-
-      return(
-      <View style={styles.main}>
-        <ScrollView>
-          <View style={styles.body}>
-            {deliveries.map((data, idx)=>(
-            <TripItem data = {data} key = {idx} type = "notification" navigation={navigation}/>
-))}
+  function NotificationList ({navigation}) {
+    const [deliveries, setDeliveries] = useState([]);
+    const {getValueFor} = storage()
+  
+  
+    const getchNotification = async()=> {
+      const accountId  = await getValueFor("accountId")
+      const requesPt = await axios.post(API_BASE_URL+"/passenger/getNotification",{accountId})
       
+      const requestData = requesPt.data
+  
+      setDeliveries(requestData)
+    }
+  
+    useFocusEffect(useCallback(()=>{
+      setInterval(getchNotification, 1000)
+    },[navigation]))
+  
+  
+        return(
+        <View style={styles.main}>
+          <ScrollView>
+            <View style={styles.body}>
+              {deliveries.map((data, idx)=>(
+              <TripItem data = {data} key = {idx} type = "notification" navigation={navigation}/>
+  ))}
+        
+            </View>
+          </ScrollView>
+          <View style={styles.footer}>
           </View>
-        </ScrollView>
-        <View style={styles.footer}>
         </View>
-      </View>
-    )
+      )
   }
-    
     const styles = StyleSheet.create({
       logo: {
         width: 30,

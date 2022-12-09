@@ -40,7 +40,9 @@ export default function useDriverLogin(navigation) {
               })
             return 0
         }
-        Alert.alert("Login Failed", "Username or password is incorrect.")
+        else{
+          Alert.alert("Login Failed", submitReq.data.msg)
+        }
 
     }
   return{

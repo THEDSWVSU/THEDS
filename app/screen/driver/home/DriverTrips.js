@@ -32,15 +32,13 @@ export default function DriverTrips({navigation}) {
     const hailingsReq = await axios.get(API_BASE_URL+'/driver/getHailings')
     const hailingsData = hailingsReq.data
 
-    console.log("Hailings Data",hailingsData.data)
-
     if(hailingsData.success){
         setHailings(hailingsData.data)
     }
 
 } 
   useFocusEffect(useCallback(()=>{
-    fetchTrips()
+    setInterval(fetchTrips,1000)
   },[]))
 
 

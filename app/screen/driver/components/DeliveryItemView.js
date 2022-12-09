@@ -26,17 +26,6 @@ export default function DeliveryItemView({route,navigation}) {
         defaultValue={origin}
         onChangeText={handleOrigin}/>
 
-        {/* <GooglePlacesAutocomplete
-      placeholder='Search'
-      onPress={(data, details = null) => {
-        // 'details' is provided when fetchDetails = true
-        console.log(data, details);
-      }}
-      query={{
-        key: MAP_KEY,
-        language: 'en',
-      }}
-    /> */}
       </View>
       <View style={styles.inputGroup}>
         <Text>Distination</Text>

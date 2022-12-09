@@ -34,9 +34,6 @@ export default function DriverDelivery({navigation}) {
     const fetchDeliveries = async()=>{
       const deliveryReq = await axios.get(API_BASE_URL+'/driver/deliveryFeeds')
       const deliveryData = deliveryReq.data
-
-      console.log("Delivery Data",deliveryData)
-
       if(deliveryData.success){
           setDeliveries(deliveryData.data)
       }
@@ -44,11 +41,10 @@ export default function DriverDelivery({navigation}) {
   } 
 
     useFocusEffect(useCallback(()=>{
-      fetchDeliveries()
+      setInterval(fetchDeliveries,1000)
     },[]))
 
     const acceptTrip = async(tripData) => {
-      console.log(tripData)
       const driverId = await getValueFor('accountId')
       const passengerId = tripData.passenger_id
       const tripId = tripData.id

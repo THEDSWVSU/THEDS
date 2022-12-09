@@ -18,6 +18,9 @@ import DriverDelivery from "./DriverDelivery";
 import DriverTrips from "./DriverTrips";
 import TripsQue from "./TripsQue";
 import storage from "../../../helder/storage";
+import TripStarting from "../DriverTrips/TripStarting";
+import Ionicons from 'react-native-vector-icons/Ionicons';
+
 
 const Tab = createBottomTabNavigator();
 
@@ -57,15 +60,27 @@ export default function DriverHome({ navigation }) {
           component={DriverTrips}
           options = {{
             title:"Hailing",
-        }}
+            tabBarIcon: ({ color, size }) => (
+              <Ionicons name="bus" color={color} size={size} />
+            )
+          }}
         />
         <Tab.Screen name="delivery" component={DriverDelivery} options = {{
           title:"Delivery",
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="cube" color={color} size={size} />
+          )
           }}/>
           <Tab.Screen name="trips-que" component={TripsQue} options = {{
-          title:"Trips Que"
+          headerShown:false,
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="map" color={color} size={size} />
+          )
           }}/>
-        <Tab.Screen name="menu" component={MenuPanel} options={{title:"Menu"}}
+        <Tab.Screen name="menu" component={MenuPanel} options={{title:"Menu",
+        tabBarIcon: ({ color, size }) => (
+          <Ionicons name="menu" color={color} size={size} />
+        )}}
         />
       </Tab.Navigator>
   );
