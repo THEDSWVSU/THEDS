@@ -39,7 +39,7 @@ export default function Home({ navigation }) {
         setNotifCount(data)
       })
     }
-    setInterval(fetchNotif, 1000)
+    setInterval(fetchNotif, 3000)
   },[]))
   const MenuPanel = ({ navigation }) => {
     const { logout, notifCount } = useHome(navigation);

@@ -38,12 +38,11 @@ export default function DriverTrips({navigation}) {
 
 } 
   useFocusEffect(useCallback(()=>{
-    setInterval(fetchTrips,1000)
+    setInterval(fetchTrips,3000)
   },[]))
 
 
   const acceptTrip = async(tripData) => {
-    console.log(tripData)
     const driverId = await getValueFor('accountId')
     const passengerId = tripData.passenger_id
     const tripId = tripData.id

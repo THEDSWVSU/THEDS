@@ -18,6 +18,7 @@ import { API_BASE_URL } from "../../../../../config";
 import { MAP_KEY } from "../../../../../config";
 import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
 import MapViewDirections from "react-native-maps-directions";
+import { calculateDistance } from "../../../../helder/utility";
 navigator.geolocation = require("expo-location");
 
 export default function CreateTrip({ navigation }) {
@@ -34,9 +35,19 @@ export default function CreateTrip({ navigation }) {
 
   const [time, setTime] = useState(new Date());
 
+  const latCenter = "11.123473";
+  const longCenter = "122.538865";
+
   const onChange = (event, selectedDate) => {
     const currentDate = selectedDate;
-    setTime(currentDate);
+    const dateNow = new Date()
+    const timeNow = dateNow.getHours()+dateNow.getMinutes()
+    const selectedTime = currentDate.getHours()+currentDate.getMinutes()
+    if(selectedTime>timeNow)
+      setTime(currentDate);
+    else {
+      Alert.alert("Invalid Time","The time you selected is invalid.")
+    }
   };
 
   const showMode = (currentMode) => {
@@ -54,32 +65,48 @@ export default function CreateTrip({ navigation }) {
   const { getValueFor } = storage();
 
   const submit = async () => {
-    const passengerId = await getValueFor("accountId")
+    if(!originCords)return Alert.alert("Incomplete","Origin place is not specified")
+    if(!distCords)return Alert.alert("Incomplete","Destination place is not specified")
+    if(!numPerson)return Alert.alert("Incomplete","Number of passengers is not specified")
+    if(!time)return Alert.alert("Incomplete","Time is not specified")
+    
+    const passengerId = await getValueFor("accountId");
     const tripData = {
-        origin: origin,
-        destination: destination,
-        time: time.getHours() + ":"+time.getMinutes() ,
-        passengerId: passengerId,
-        coords:{originCords, distCords},
-        numPassenger:numPerson,
-        distance: distance,
-        price:Math.round(((Math.round(distance*100)/100) * 20) * numPerson)
-      }
-    navigation.navigate('trip-details',{tripData})
+      origin: origin,
+      destination: destination,
+      time: time.getHours() + ":" + time.getMinutes(),
+      passengerId: passengerId,
+      coords: { originCords, distCords },
+      numPassenger: numPerson,
+      distance: distance,
+      price: Math.round((Math.round(distance * 100) / 100) * 20 * numPerson),
+    };
+    navigation.navigate("trip-details", { tripData });
   };
   const handleOrigin = async (data, details) => {
-    setOrigin(data.description);
     const geom = details.geometry;
-    
-  setLat1(geom.location.lat);
-  setLong1(geom.location.lng)
-  setOriginCords({
-    latitude: geom.location.lat,
-      longitude: geom.location.lng,
-      latitudeDelta: 0.01,
-      longitudeDelta: 0.01,
-  })
-  }
+
+    const distanceTocenter = calculateDistance(
+      geom.location.lat,
+      geom.location.lng,
+      latCenter,
+      longCenter
+    );
+    if (distanceTocenter < 2) {
+      setOrigin(data.description);
+
+      setLat1(geom.location.lat);
+      setLong1(geom.location.lng);
+      setOriginCords({
+        latitude: geom.location.lat,
+        longitude: geom.location.lng,
+        latitudeDelta: 0.01,
+        longitudeDelta: 0.01,
+      });
+    }else{
+      Alert.alert("Out of Bounds","Please select only a place within poblacion of Calinog.")
+    }
+  };
   const handleDestination = async (data, details) => {
     setDestination(data.description);
     const geom = details.geometry;
@@ -92,22 +119,9 @@ export default function CreateTrip({ navigation }) {
     });
 
     const lat2 = details.geometry.location.lat;
-    const long2 = details.geometry.location.lng
-
-    var radlat1 = (Math.PI * lat1) / 180;
-    var radlat2 = (Math.PI * lat2) / 180;
-    var theta = long1 - long2;
-    var radtheta = (Math.PI * theta) / 180;
-    var dist =
-      Math.sin(radlat1) * Math.sin(radlat2) +
-      Math.cos(radlat1) * Math.cos(radlat2) * Math.cos(radtheta);
-    dist = Math.acos(dist);
-    dist = (dist * 180) / Math.PI;
-    dist = dist * 60 * 1.1515;
-    dist = dist * 1.609344;
-    setDistance(dist);
+    const long2 = details.geometry.location.lng;
+    setDistance(calculateDistance(lat1, long2, lat2, long2));
   };
-
 
   return (
     <View style={styles.main}>
@@ -117,7 +131,14 @@ export default function CreateTrip({ navigation }) {
       <View style={styles.inputGroup}>
         <GooglePlacesAutocomplete
           placeholder="Type a place"
-          query={{ key: MAP_KEY, components: "country:ph" }}
+          query={{
+            key: MAP_KEY,
+            language: "es", // language of the results
+            location: "11.123473, 122.538865",
+            radius: "2000", //15 km
+            components: "country:ph",
+            strictbounds: true,
+          }}
           fetchDetails={true}
           onPress={(data, details = null) => handleOrigin(data, details)}
           onFail={(error) => console.log(error)}
@@ -130,11 +151,18 @@ export default function CreateTrip({ navigation }) {
       <View style={styles.inputGroup}>
         <GooglePlacesAutocomplete
           placeholder="Type a place"
-          query={{ key: MAP_KEY, components: "country:ph" }}
           fetchDetails={true}
           onPress={(data, details = null) => handleDestination(data, details)}
           onFail={(error) => console.log(error)}
           onNotFound={() => console.log("no results")}
+          query={{
+            key: MAP_KEY,
+            language: "es", // language of the results
+            location: "11.123473, 122.538865",
+            radius: "2000", //15 km
+            components: "country:ph",
+            strictbounds: true,
+          }}
         />
       </View>
       <View style={styles.mapView}>
@@ -148,7 +176,11 @@ export default function CreateTrip({ navigation }) {
             longitudeDelta: 0.0221,
           }}
         >
-          {originCords ? <Marker coordinate={originCords} pinColor="green" /> : ""}
+          {originCords ? (
+            <Marker coordinate={originCords} pinColor="green" />
+          ) : (
+            ""
+          )}
           {distCords ? <Marker coordinate={distCords} /> : ""}
 
           {origin && distCords ? (
@@ -163,7 +195,6 @@ export default function CreateTrip({ navigation }) {
           ) : (
             ""
           )}
-          
         </MapView>
       </View>
       <View style={styles.label}>
@@ -257,7 +288,6 @@ const styles = StyleSheet.create({
     backgroundColor: "#f7c22f",
   },
 });
-
 
 const QuantitiySelect = ({ title, action, selected, setSelected }) => {
   return (

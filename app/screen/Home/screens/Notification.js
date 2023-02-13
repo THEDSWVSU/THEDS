@@ -48,7 +48,7 @@ export default function Notification({navigation}) {
     }
   
     useFocusEffect(useCallback(()=>{
-      setInterval(getchNotification, 1000)
+      setInterval(getchNotification, 3000)
     },[navigation]))
   
   

@@ -41,7 +41,7 @@ export default function DriverDelivery({navigation}) {
   } 
 
     useFocusEffect(useCallback(()=>{
-      setInterval(fetchDeliveries,1000)
+      setInterval(fetchDeliveries,3000)
     },[]))
 
     const acceptTrip = async(tripData) => {

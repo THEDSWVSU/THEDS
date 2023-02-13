@@ -41,7 +41,6 @@ export default function TripHome({navigation}) {
         const passengerId = await getValueFor("accountId")
         const tripRequest = await axios.post(API_BASE_URL+"/passenger/getHailings",{passengerId:passengerId})
         const tripResponse = tripRequest.data
-        console.log(tripResponse)
         setTrips(tripResponse)
       }
 

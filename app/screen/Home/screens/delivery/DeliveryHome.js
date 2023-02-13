@@ -67,7 +67,6 @@ export default function DeliveryHome({ navigation }) {
   const cancelBooking = (tripData) => {
 
     const confirm = async () => {
-      console.log(tripData);
       const tripId = tripData.id;
       const acceptReq = await axios.post(API_BASE_URL + "/passenger/cancelDelivery", {
         tripId: tripId

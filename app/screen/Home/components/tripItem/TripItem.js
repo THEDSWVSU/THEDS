@@ -56,6 +56,9 @@ export default function TripItem({ data, type, action, navigation }) {
     return (
       <View style={styles.main}>
         <View style={styles.details}>
+          <Text style={styles.transactionId}>
+            {data.transaction_id}
+          </Text>
           <Text style={styles.title}>
             {data.origin} to {data.destination}
           </Text>
@@ -71,6 +74,9 @@ export default function TripItem({ data, type, action, navigation }) {
   return (
     <View style={styles.main}>
       <View style={styles.details}>
+      <Text style={styles.transactionId}>
+            {data.transaction_id}
+          </Text>
         <Text style={styles.title}>
           {data.origin} to {data.destination}
         </Text>
@@ -141,4 +147,11 @@ const styles = StyleSheet.create({
   col: {
     width: "100%",
   },
+  transactionId:{
+    fontSize:20,
+    color:'orange',
+    fontWeight:'bold',
+    padding:5,
+    borderRadius:10,
+  }
 });

@@ -170,7 +170,14 @@ export default function CreateTrip({ navigation }) {
       <View style={styles.inputGroup}>
         <GooglePlacesAutocomplete
           placeholder="Type a place"
-          query={{ key: MAP_KEY, components: "country:ph" }}
+          query={{
+            key: MAP_KEY,
+            language: "es", // language of the results
+            location: "11.123473, 122.538865",
+            radius: "2000", //15 km
+            components: "country:ph",
+            strictbounds: true,
+          }}
           fetchDetails={true}
           onPress={(data, details = null) => handleOrigin(data, details)}
           onFail={(error) => console.log(error)}
@@ -183,7 +190,14 @@ export default function CreateTrip({ navigation }) {
       <View style={styles.inputGroup}>
         <GooglePlacesAutocomplete
           placeholder="Type a place"
-          query={{ key: MAP_KEY, components: "country:ph" }}
+          query={{
+            key: MAP_KEY,
+            language: "es", // language of the results
+            location: "11.123473, 122.538865",
+            radius: "2000", //15 km
+            components: "country:ph",
+            strictbounds: true,
+          }}
           fetchDetails={true}
           onPress={(data, details = null) => handleDestination(data, details)}
           onFail={(error) => console.log(error)}

@@ -32,7 +32,6 @@ export default function Trips({navigation}) {
 
       <Stack.Screen name="hailings" component={TripHome} options = {{title:"Hailing"}}/>
       <Stack.Screen name="trip-details" component={ConfirmTrip} options = {{title:"Confirm Booking"}}/>
-      <Stack.Screen name="trip-view" component={TripView} options = {{title:"Trip Details"}}/>
 
     </Stack.Navigator>
     )
