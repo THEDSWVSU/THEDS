@@ -93,7 +93,7 @@ export default function DeliveryRequestDetails({ navigation, route }) {
           </View>
           <View style={styles.detailRowTotal}>
             <Text style={styles.labelImp}>Total Fare</Text>
-            <Text style={styles.detailTotaPrice}>₱ {totalPrice}</Text>
+            <Text style={styles.detailTotaPrice}>₱ {actualPrice}</Text>
           </View>
         </View>
 

@@ -18,7 +18,9 @@ import { API_BASE_URL } from "../../../../../config";
 import { MAP_KEY } from "../../../../../config";
 import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
 import MapViewDirections from "react-native-maps-directions";
-import { calculateDistance } from "../../../../helder/utility";
+import { calculateDistance, locations } from "../../../../helder/utility";
+import AutocompleteInput from "react-native-autocomplete-input";
+import SearchAutoComplete from "../../components/SearchAutocomplete/SearchAutoComplete";
 navigator.geolocation = require("expo-location");
 
 export default function CreateTrip({ navigation }) {
@@ -32,21 +34,26 @@ export default function CreateTrip({ navigation }) {
   const [distance, setDistance] = useState(0);
   const [originCords, setOriginCords] = useState(0);
   const [distCords, setDistCords] = useState(0);
+  const [places, setPlaces] = useState([]);
 
   const [time, setTime] = useState(new Date());
 
   const latCenter = "11.123473";
   const longCenter = "122.538865";
 
+  useEffect(() => {
+    const getPlaces = locations.map((value) => value.name);
+    setPlaces(getPlaces);
+  }, []);
+
   const onChange = (event, selectedDate) => {
     const currentDate = selectedDate;
-    const dateNow = new Date()
-    const timeNow = dateNow.getHours()+dateNow.getMinutes()
-    const selectedTime = currentDate.getHours()+currentDate.getMinutes()
-    if(selectedTime>timeNow)
-      setTime(currentDate);
+    const dateNow = new Date();
+    const timeNow = dateNow.getHours() + dateNow.getMinutes();
+    const selectedTime = currentDate.getHours() + currentDate.getMinutes();
+    if (selectedTime > timeNow) setTime(currentDate);
     else {
-      Alert.alert("Invalid Time","The time you selected is invalid.")
+      Alert.alert("Invalid Time", "The time you selected is invalid.");
     }
   };
 
@@ -65,12 +72,16 @@ export default function CreateTrip({ navigation }) {
   const { getValueFor } = storage();
 
   const submit = async () => {
-    if(!originCords)return Alert.alert("Incomplete","Origin place is not specified")
-    if(!distCords)return Alert.alert("Incomplete","Destination place is not specified")
-    if(!numPerson)return Alert.alert("Incomplete","Number of passengers is not specified")
-    if(!time)return Alert.alert("Incomplete","Time is not specified")
-    
+    if (!originCords)
+      return Alert.alert("Incomplete", "Origin place is not specified");
+    if (!distCords)
+      return Alert.alert("Incomplete", "Destination place is not specified");
+    if (!numPerson)
+      return Alert.alert("Incomplete", "Number of passengers is not specified");
+    if (!time) return Alert.alert("Incomplete", "Time is not specified");
+
     const passengerId = await getValueFor("accountId");
+    const price = Math.round((Math.round(distance * 100) / 100) * 20 * numPerson)
     const tripData = {
       origin: origin,
       destination: destination,
@@ -79,47 +90,51 @@ export default function CreateTrip({ navigation }) {
       coords: { originCords, distCords },
       numPassenger: numPerson,
       distance: distance,
-      price: Math.round((Math.round(distance * 100) / 100) * 20 * numPerson),
+      price: price < 50? 50: price,
     };
     navigation.navigate("trip-details", { tripData });
   };
-  const handleOrigin = async (data, details) => {
-    const geom = details.geometry;
-
+  const handleOrigin = async (data) => {
+  //  const geom = details.geometry;
+    console.log(data)
     const distanceTocenter = calculateDistance(
-      geom.location.lat,
-      geom.location.lng,
+      data.lat,
+      data.lng,
       latCenter,
       longCenter
     );
-    if (distanceTocenter < 2) {
-      setOrigin(data.description);
+    console.log(distanceTocenter)
+    if (distanceTocenter < 5) {
+      setOrigin(data.name);
 
-      setLat1(geom.location.lat);
-      setLong1(geom.location.lng);
+      setLat1(data.lat);
+      setLong1(data.lng);
       setOriginCords({
-        latitude: geom.location.lat,
-        longitude: geom.location.lng,
+        latitude: data.lat,
+        longitude: data.lng,
         latitudeDelta: 0.01,
         longitudeDelta: 0.01,
       });
-    }else{
-      Alert.alert("Out of Bounds","Please select only a place within poblacion of Calinog.")
+    } else {
+      Alert.alert(
+        "Out of Bounds",
+        "Please select only a place within poblacion of Calinog."
+      );
     }
   };
-  const handleDestination = async (data, details) => {
-    setDestination(data.description);
-    const geom = details.geometry;
+  const handleDestination = async (data) => {
+    setDestination(data.name);
+    //const geom = details.geometry;
 
     setDistCords({
-      latitude: geom.location.lat,
-      longitude: geom.location.lng,
+      latitude: data.lat,
+      longitude: data.lng,
       latitudeDelta: 0.01,
       longitudeDelta: 0.01,
     });
 
-    const lat2 = details.geometry.location.lat;
-    const long2 = details.geometry.location.lng;
+    const lat2 = data.lat;
+    const long2 = data.lng;
     setDistance(calculateDistance(lat1, long2, lat2, long2));
   };
 
@@ -128,7 +143,7 @@ export default function CreateTrip({ navigation }) {
       <View style={styles.label}>
         <Text>From</Text>
       </View>
-      <View style={styles.inputGroup}>
+      {/* <View style={styles.inputGroup}>
         <GooglePlacesAutocomplete
           placeholder="Type a place"
           query={{
@@ -143,28 +158,16 @@ export default function CreateTrip({ navigation }) {
           onPress={(data, details = null) => handleOrigin(data, details)}
           onFail={(error) => console.log(error)}
           onNotFound={() => console.log("no results")}
-        />
-      </View>
+        /> 
+              </View>
+
+        */}
+
+        <SearchAutoComplete list={locations} setSelected = {handleOrigin}/>
       <View style={styles.label}>
         <Text>To</Text>
       </View>
-      <View style={styles.inputGroup}>
-        <GooglePlacesAutocomplete
-          placeholder="Type a place"
-          fetchDetails={true}
-          onPress={(data, details = null) => handleDestination(data, details)}
-          onFail={(error) => console.log(error)}
-          onNotFound={() => console.log("no results")}
-          query={{
-            key: MAP_KEY,
-            language: "es", // language of the results
-            location: "11.123473, 122.538865",
-            radius: "2000", //15 km
-            components: "country:ph",
-            strictbounds: true,
-          }}
-        />
-      </View>
+      <SearchAutoComplete list={locations} setSelected = {handleDestination}/>
       <View style={styles.mapView}>
         <MapView
           style={styles.map}
@@ -287,6 +290,22 @@ const styles = StyleSheet.create({
     borderRadius: 3,
     backgroundColor: "#f7c22f",
   },
+
+  descriptionContainer: {
+    flex: 1,
+    justifyContent: 'center',
+  },
+  itemText: {
+    fontSize: 15,
+    paddingTop: 5,
+    paddingBottom: 5,
+    margin: 2,
+  },
+  infoText: {
+    textAlign: 'center',
+    fontSize: 16,
+  },
+
 });
 
 const QuantitiySelect = ({ title, action, selected, setSelected }) => {

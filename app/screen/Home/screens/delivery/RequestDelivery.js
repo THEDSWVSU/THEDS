@@ -18,6 +18,8 @@ import { API_BASE_URL } from "../../../../../config";
 import { MAP_KEY } from "../../../../../config";
 import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
 import MapViewDirections from "react-native-maps-directions";
+import SearchAutoComplete from "../../components/SearchAutocomplete/SearchAutoComplete";
+import { calculateDistance, locations } from "../../../../helder/utility";
 navigator.geolocation = require("expo-location");
 
 export default function CreateTrip({ navigation }) {
@@ -35,7 +37,8 @@ export default function CreateTrip({ navigation }) {
   const [next, setNext] = useState(false);
 
   const [time, setTime] = useState(new Date());
-
+  const latCenter = "11.123473";
+  const longCenter = "122.538865";
   const onChange = (event, selectedDate) => {
     const currentDate = selectedDate;
     setTime(currentDate);
@@ -70,46 +73,49 @@ export default function CreateTrip({ navigation }) {
     };
     navigation.navigate("delivery-request-details", { tripData });
   };
-  const handleOrigin = async (data, details) => {
-    setOrigin(data.description);
-    const geom = details.geometry;
-
-    setLat1(geom.location.lat);
-    setLong1(geom.location.lng);
-    setOriginCords({
-      latitude: geom.location.lat,
-      longitude: geom.location.lng,
-      latitudeDelta: 0.01,
-      longitudeDelta: 0.01,
-    });
-  };
-  const handleDestination = async (data, details) => {
-    setDestination(data.description);
-    const geom = details.geometry;
-
-    setDistCords({
-      latitude: geom.location.lat,
-      longitude: geom.location.lng,
-      latitudeDelta: 0.01,
-      longitudeDelta: 0.01,
-    });
-
-    const lat2 = details.geometry.location.lat;
-    const long2 = details.geometry.location.lng;
-
-    var radlat1 = (Math.PI * lat1) / 180;
-    var radlat2 = (Math.PI * lat2) / 180;
-    var theta = long1 - long2;
-    var radtheta = (Math.PI * theta) / 180;
-    var dist =
-      Math.sin(radlat1) * Math.sin(radlat2) +
-      Math.cos(radlat1) * Math.cos(radlat2) * Math.cos(radtheta);
-    dist = Math.acos(dist);
-    dist = (dist * 180) / Math.PI;
-    dist = dist * 60 * 1.1515;
-    dist = dist * 1.609344;
-    setDistance(Math.round(dist * 100) / 100);
-  };
+  const handleOrigin = async (data) => {
+    //  const geom = details.geometry;
+      console.log(data)
+      const distanceTocenter = calculateDistance(
+        data.lat,
+        data.lng,
+        latCenter,
+        longCenter
+      );
+      console.log(distanceTocenter)
+      if (distanceTocenter < 5) {
+        setOrigin(data.name);
+  
+        setLat1(data.lat);
+        setLong1(data.lng);
+        setOriginCords({
+          latitude: data.lat,
+          longitude: data.lng,
+          latitudeDelta: 0.01,
+          longitudeDelta: 0.01,
+        });
+      } else {
+        Alert.alert(
+          "Out of Bounds",
+          "Please select only a place within poblacion of Calinog."
+        );
+      }
+    };
+    const handleDestination = async (data) => {
+      setDestination(data.name);
+      //const geom = details.geometry;
+  
+      setDistCords({
+        latitude: data.lat,
+        longitude: data.lng,
+        latitudeDelta: 0.01,
+        longitudeDelta: 0.01,
+      });
+  
+      const lat2 = data.lat;
+      const long2 = data.lng;
+      setDistance(calculateDistance(lat1, long2, lat2, long2));
+    };
 
   const Next = () => {
     return (
@@ -167,43 +173,11 @@ export default function CreateTrip({ navigation }) {
       <View style={styles.label}>
         <Text>From</Text>
       </View>
-      <View style={styles.inputGroup}>
-        <GooglePlacesAutocomplete
-          placeholder="Type a place"
-          query={{
-            key: MAP_KEY,
-            language: "es", // language of the results
-            location: "11.123473, 122.538865",
-            radius: "2000", //15 km
-            components: "country:ph",
-            strictbounds: true,
-          }}
-          fetchDetails={true}
-          onPress={(data, details = null) => handleOrigin(data, details)}
-          onFail={(error) => console.log(error)}
-          onNotFound={() => console.log("no results")}
-        />
-      </View>
+        <SearchAutoComplete list={locations} setSelected = {handleOrigin}/>
       <View style={styles.label}>
         <Text>To</Text>
       </View>
-      <View style={styles.inputGroup}>
-        <GooglePlacesAutocomplete
-          placeholder="Type a place"
-          query={{
-            key: MAP_KEY,
-            language: "es", // language of the results
-            location: "11.123473, 122.538865",
-            radius: "2000", //15 km
-            components: "country:ph",
-            strictbounds: true,
-          }}
-          fetchDetails={true}
-          onPress={(data, details = null) => handleDestination(data, details)}
-          onFail={(error) => console.log(error)}
-          onNotFound={() => console.log("no results")}
-        />
-      </View>
+      <SearchAutoComplete list={locations} setSelected = {handleDestination}/>
       <View style={styles.mapView}>
         <MapView
           style={styles.map}
