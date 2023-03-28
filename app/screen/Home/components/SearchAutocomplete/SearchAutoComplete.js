@@ -21,7 +21,6 @@ export default function SearchAutoComplete({list, setSelected}) {
             let toSearch = inputValue
             trimedValue = trimedValue.toLowerCase()
             toSearch = toSearch.toLocaleLowerCase()
-            console.log(trimedValue, toSearch)
             if(trimedValue === toSearch){
                 return data
             }

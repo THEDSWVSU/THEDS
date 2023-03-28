@@ -39,15 +39,25 @@ export default function CreateTrip({ navigation }) {
   const [time, setTime] = useState(new Date());
   const latCenter = "11.123473";
   const longCenter = "122.538865";
-  const onChange = (event, selectedDate) => {
+
+
+  const timeHandler = (event, selectedDate) => {
     const currentDate = selectedDate;
-    setTime(currentDate);
+    const dateNow = new Date();
+    const timeNow = dateNow.getHours() + dateNow.getMinutes();
+    const selectedTime = currentDate.getHours() + currentDate.getMinutes();
+    if (selectedTime > timeNow) {
+      setTime(currentDate)
+    }
+    else {
+      Alert.alert("Invalid Time", "The time you selected is invalid.");
+    }
   };
 
   const showMode = (currentMode) => {
     DateTimePickerAndroid.open({
       value: time,
-      onChange,
+      onChange:timeHandler,
       mode: currentMode,
     });
   };
