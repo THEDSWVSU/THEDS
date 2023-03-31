@@ -21,7 +21,6 @@ export default function DeliveryRequestDetails({ navigation, route }) {
 
   const totalPrice = (sLuggage * 10 * distance) + (mLuggage*30*distance)+(lLuggage*50*distance)
   const actualPrice = totalPrice<50?50:totalPrice
-  console.log(data);
 
   const confirm = async () => {
     const confirmBooking = await axios.post(

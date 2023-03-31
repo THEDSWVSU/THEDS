@@ -47,7 +47,6 @@ export default function DeliveryHome({ navigation }) {
     const requestData = requesPt.data;
 
     setDeliveries(requestData);
-    console.log(requestData);
   };
 
   function CustomNavigationBar() {

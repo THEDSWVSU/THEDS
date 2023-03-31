@@ -10,7 +10,6 @@ export default function useHome(navigation) {
     useEffect(()=>{
         async function readUser(){
             const accountId = await getValueFor("accountId")
-            console.log(accountId)
         }
         readUser()
     },[])

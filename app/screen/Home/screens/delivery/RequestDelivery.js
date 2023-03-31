@@ -85,14 +85,12 @@ export default function CreateTrip({ navigation }) {
   };
   const handleOrigin = async (data) => {
     //  const geom = details.geometry;
-      console.log(data)
       const distanceTocenter = calculateDistance(
         data.lat,
         data.lng,
         latCenter,
         longCenter
       );
-      console.log(distanceTocenter)
       if (distanceTocenter < 5) {
         setOrigin(data.name);
   

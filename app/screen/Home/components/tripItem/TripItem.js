@@ -19,26 +19,31 @@ export default function TripItem({ data, type, action, navigation }) {
   }, [data]);
 
   const viewNotif = () => {
-    navigation.navigate("trip-view",{tripData:details, trip:data})
-  }
+    navigation.navigate("trip-view", { tripData: details, trip: data });
+  };
   if (type === "notification") {
     if (details) {
-      const status = data.notif_status
+      const status = data.notif_status;
       return (
-        <View style={data.seen?styles.main:styles.darkMen} onTouchEnd = {viewNotif}>
+        <View
+          style={data.seen ? styles.main : styles.darkMen}
+          onTouchEnd={viewNotif}
+        >
           <View style={styles.col}>
+          <Text style={styles.transactionId}>{details.transaction_id}</Text>
+
             <Text style={styles.title}>
-              {status === "arrived"?"Your Driver has Arrived.":""}
-            {status === "starting"?"Your Driver is on the way.":""} 
-            {status === "done"?"Arrived at Destination.":""}
-            {status === "accepted"?"Booking Accepted.":""}
+              {status === "arrived" ? "Your Driver has Arrived." : ""}
+              {status === "starting" ? "Your Driver is on the way." : ""}
+              {status === "done" ? "Arrived at Destination." : ""}
+              {status === "accepted" ? "Booking Accepted." : ""}
             </Text>
             <Text style={styles.contentText}>
               Your {data.type} booking for {details.origin} to{" "}
               {details.destination}
             </Text>
             <Text style={styles.contentBold}>
-              Driver: 
+              Driver:
               {details.firstname +
                 " " +
                 details.middlename +
@@ -56,17 +61,22 @@ export default function TripItem({ data, type, action, navigation }) {
     return (
       <View style={styles.main}>
         <View style={styles.details}>
-          <Text style={styles.transactionId}>
-            {data.transaction_id}
-          </Text>
+          <Text style={styles.transactionId}>{data.transaction_id}</Text>
           <Text style={styles.title}>
             {data.origin} to {data.destination}
           </Text>
           <Text style={styles.date}>Pickup: {data.pickup_time}</Text>
         </View>
         <View style={styles.row}>
-          
-        {data.status === "pending"?<Button title="Cancel" color="#ee4f00" onPress={() => action(data)} />:<Text>{data.status}</Text>}
+          {data.status === "pending" ? (
+            <Button
+              title="Cancel"
+              color="#ee4f00"
+              onPress={() => action(data)}
+            />
+          ) : (
+            <Text>{data.status}</Text>
+          )}
         </View>
       </View>
     );
@@ -74,9 +84,7 @@ export default function TripItem({ data, type, action, navigation }) {
   return (
     <View style={styles.main}>
       <View style={styles.details}>
-      <Text style={styles.transactionId}>
-            {data.transaction_id}
-          </Text>
+        <Text style={styles.transactionId}>{data.transaction_id}</Text>
         <Text style={styles.title}>
           {data.origin} to {data.destination}
         </Text>
@@ -89,20 +97,23 @@ export default function TripItem({ data, type, action, navigation }) {
         <Text style={styles.date}>Pickup: {data.pickup_time}</Text>
       </View>
       <View style={styles.action}>
-        {data.status === "pending"?<Button title="Cancel" color="#ee4f00" onPress={() => action(data)} />:<Text>{data.status}</Text>}
+        {data.status === "pending" ? (
+          <Button title="Cancel" color="#ee4f00" onPress={() => action(data)} />
+        ) : (
+          <Text>{data.status}</Text>
+        )}
       </View>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  darkMen:{
-    backgroundColor:"#3d44c4",
+  darkMen: {
+    backgroundColor: "#b0deff",
     padding: 10,
     flex: 1,
     justifyContent: "space-between",
     alignItems: "center",
-    backgroundColor: "#d6d6d6",
     width: "100%",
     marginBottom: 5,
     flexDirection: "row",
@@ -147,11 +158,11 @@ const styles = StyleSheet.create({
   col: {
     width: "100%",
   },
-  transactionId:{
-    fontSize:20,
-    color:'orange',
-    fontWeight:'bold',
-    padding:5,
-    borderRadius:10,
-  }
+  transactionId: {
+    fontSize: 20,
+    color: "orange",
+    fontWeight: "bold",
+    padding: 5,
+    borderRadius: 10,
+  },
 });

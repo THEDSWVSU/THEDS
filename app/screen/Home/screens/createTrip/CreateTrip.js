@@ -105,7 +105,6 @@ export default function CreateTrip({ navigation }) {
       latCenter,
       longCenter
     );
-    console.log(distanceTocenter)
     if (distanceTocenter < 5) {
       setOrigin(data.name);
 
