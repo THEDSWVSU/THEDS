@@ -17,8 +17,8 @@ export default function TripStarting({ navigation, route }) {
   const [dist, setDist] = useState(null);
 
   useEffect(() => {
-    console.log(queData);
-
+    //console.log(queData);
+    console.log("data",data)
     const getCoords = async () => {
       const coords = await JSON.parse(data.coords);
       setOrigin(coords.originCords);
@@ -145,6 +145,9 @@ export default function TripStarting({ navigation, route }) {
           <Text style={styles.detailsText}>
             {data.firstname + " " + data.middlename + " " + data.lastname}
           </Text>
+          <Text style={styles.detailsText}>
+            {data.phone_number}
+          </Text>
         </View>
       ) : (
         <View style={styles.deliveryContent}>
@@ -153,6 +156,9 @@ export default function TripStarting({ navigation, route }) {
             <Text style={styles.detailsText}>
               {data.firstname + " " + data.middlename + " " + data.lastname}
             </Text>
+            <Text style={styles.detailsText}>
+            {data.phone_number}
+          </Text>
           </View>
           <View style={styles.tripDetails}>
             <Text style={styles.label}>Packages</Text>
