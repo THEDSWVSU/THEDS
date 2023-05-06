@@ -187,15 +187,11 @@ export default function CreateTrip({ navigation }) {
       </View>
       <SearchAutoComplete list={locations} setSelected = {handleDestination}/>
       <View style={styles.mapView}>
-        <MapView
+        {originCords?(
+          <MapView
           style={styles.map}
           provider={PROVIDER_GOOGLE}
-          initialRegion={{
-            latitude: 11.1227452,
-            longitude: 122.538158,
-            latitudeDelta: 0.0522,
-            longitudeDelta: 0.0221,
-          }}
+          initialRegion={originCords}
         >
           {originCords ? (
             <Marker coordinate={originCords} pinColor="green" />
@@ -203,7 +199,7 @@ export default function CreateTrip({ navigation }) {
             ""
           )}
           {distCords ? <Marker coordinate={distCords} /> : ""}
-          {origin && distCords ? (
+          {/* {origin && distCords ? (
             <MapViewDirections
               origin={origin}
               destination={distCords}
@@ -214,9 +210,10 @@ export default function CreateTrip({ navigation }) {
             />
           ) : (
             ""
-          )}
+          )} */}
           
         </MapView>
+        ):""}
       </View>
       <View style={styles.footer}>
         <Button title="Next" onPress={() => setNext(true)} />

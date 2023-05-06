@@ -18,7 +18,6 @@ export default function TripStarting({ navigation, route }) {
 
   useEffect(() => {
     //console.log(queData);
-    console.log("data",data)
     const getCoords = async () => {
       const coords = await JSON.parse(data.coords);
       setOrigin(coords.originCords);
@@ -109,7 +108,7 @@ export default function TripStarting({ navigation, route }) {
         >
           {origin ? <Marker coordinate={origin} pinColor="green" /> : ""}
           {dist ? <Marker coordinate={dist} /> : ""}
-          {origin && dist ? (
+          {/* {origin && dist ? (
             <MapViewDirections
               origin={origin}
               destination={dist}
@@ -120,7 +119,7 @@ export default function TripStarting({ navigation, route }) {
             />
           ) : (
             ""
-          )}
+          )} */}
         </MapView>
       </View>
       <View style={styles.row}>
@@ -141,24 +140,30 @@ export default function TripStarting({ navigation, route }) {
       </View>
       {type === "service" ? (
         <View style={styles.tripDetails}>
+          <View style={styles.flex}>
+            <Text style={styles.label}>Transaction Number: </Text>
+            <Text style={styles.transactionLabel}>{data.transaction_id}</Text>
+          </View>
+
           <Text style={styles.label}>Passenger</Text>
           <Text style={styles.detailsText}>
             {data.firstname + " " + data.middlename + " " + data.lastname}
           </Text>
-          <Text style={styles.detailsText}>
-            {data.phone_number}
-          </Text>
+          <Text style={styles.detailsText}>{data.phone_number}</Text>
         </View>
       ) : (
         <View style={styles.deliveryContent}>
           <View style={styles.tripDetails}>
+            <View style={styles.flex}>
+              <Text style={styles.label}>Transaction Number: </Text>
+              <Text style={styles.transactionLabel}>{data.transaction_id}</Text>
+            </View>
             <Text style={styles.label}>Delivery</Text>
+
             <Text style={styles.detailsText}>
               {data.firstname + " " + data.middlename + " " + data.lastname}
             </Text>
-            <Text style={styles.detailsText}>
-            {data.phone_number}
-          </Text>
+            <Text style={styles.detailsText}>{data.phone_number}</Text>
           </View>
           <View style={styles.tripDetails}>
             <Text style={styles.label}>Packages</Text>
@@ -169,6 +174,14 @@ export default function TripStarting({ navigation, route }) {
           </View>
         </View>
       )}
+      <View style={styles.deliveryContent}>
+        <View style={styles.tripDetails}>
+          <View style={styles.flexCenter}>
+            <Text style={styles.label}>Amount to Pay</Text>
+            <Text style={styles.transactionLabel}>₱{data.price}</Text>
+          </View>
+        </View>
+      </View>
       <View style={styles.footer}>
         {arrived ? (
           <Button title="Drop Off" color={"red"} onPress={dropOffPressed} />
@@ -244,4 +257,21 @@ const styles = StyleSheet.create({
     width: "100%",
     padding: 10,
   },
+  transactionLabel: {
+    fontWeight: "800",
+    fontSize: 20,
+    color: "orange",
+  },
+  flex: {
+    flex: 0,
+    flexDirection: "row",
+  },
+  flexCenter: {
+    flex: 0,
+    width:'100%',
+    flexDirection: "column",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  pricetext: {},
 });

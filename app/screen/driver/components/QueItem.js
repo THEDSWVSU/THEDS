@@ -34,6 +34,9 @@ export default function QueItem({data, type, view, navigation}) {
     <View style={styles.main}>
       <View style={styles.details}>
         <Text style = {styles.title}>{type.toUpperCase()} BOOKING</Text>
+        <Text style={styles.transactionLabel}>
+        {details.transaction_id}
+        </Text>
         <Text style={styles.title}>{details.firstname + " " + details.middlename + " " + details.lastname}</Text>
         <Text style={styles.subtitle}>Distination: {details.origin} to {details.destination}</Text>
         <Text style={styles.subtitle}>Pickup Time: {details.pickup_time}</Text>
@@ -73,6 +76,11 @@ const styles = StyleSheet.create({
   },
   details:{
     width:"75%"
+  },
+  transactionLabel: {
+    color: "orange",
+    fontWeight: "800",
+    fontSize: 30,
   },
   row: {},
 });

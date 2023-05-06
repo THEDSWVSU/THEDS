@@ -52,9 +52,8 @@ export default function CreateTrip({ navigation }) {
     const timeNow = dateNow.getHours() + dateNow.getMinutes();
     const selectedTime = currentDate.getHours() + currentDate.getMinutes();
     if (selectedTime > timeNow) {
-      setTime(currentDate)
-    }
-    else {
+      setTime(currentDate);
+    } else {
       Alert.alert("Invalid Time", "The time you selected is invalid.");
     }
   };
@@ -83,7 +82,9 @@ export default function CreateTrip({ navigation }) {
     if (!time) return Alert.alert("Incomplete", "Time is not specified");
 
     const passengerId = await getValueFor("accountId");
-    const price = Math.round((Math.round(distance * 100) / 100) * 20 * numPerson)
+    const price = Math.round(
+      (Math.round(distance * 100) / 100) * 20 * numPerson
+    );
     const tripData = {
       origin: origin,
       destination: destination,
@@ -92,20 +93,20 @@ export default function CreateTrip({ navigation }) {
       coords: { originCords, distCords },
       numPassenger: numPerson,
       distance: distance,
-      price: price < 50? 50: price,
+      price: price < 50 ? 50 : price,
     };
     navigation.navigate("trip-details", { tripData });
   };
   const handleOrigin = async (data) => {
-  //  const geom = details.geometry;
-    console.log(data)
+    //  const geom = details.geometry;
+    console.log(data);
     const distanceTocenter = calculateDistance(
       data.lat,
       data.lng,
       latCenter,
       longCenter
     );
-    if (distanceTocenter < 5) {
+    if (distanceTocenter < 10) {
       setOrigin(data.name);
 
       setLat1(data.lat);
@@ -164,42 +165,37 @@ export default function CreateTrip({ navigation }) {
 
         */}
 
-        <SearchAutoComplete list={locations} setSelected = {handleOrigin}/>
+      <SearchAutoComplete list={locations} setSelected={handleOrigin} />
       <View style={styles.label}>
         <Text>To</Text>
       </View>
-      <SearchAutoComplete list={locations} setSelected = {handleDestination}/>
+      <SearchAutoComplete list={locations} setSelected={handleDestination} />
       <View style={styles.mapView}>
-        <MapView
-          style={styles.map}
-          provider={PROVIDER_GOOGLE}
-          initialRegion={{
-            latitude: 11.1227452,
-            longitude: 122.538158,
-            latitudeDelta: 0.0522,
-            longitudeDelta: 0.0221,
-          }}
-        >
-          {originCords ? (
-            <Marker coordinate={originCords} pinColor="green" />
-          ) : (
-            ""
-          )}
-          {distCords ? <Marker coordinate={distCords} /> : ""}
+        {originCords ? (
+          <MapView
+            style={styles.map}
+            provider={PROVIDER_GOOGLE}
+            initialRegion={originCords}
+          >
+             {originCords ? <Marker coordinate={originCords} /> : ""}
+            {distCords ? <Marker coordinate={distCords} /> : ""}
 
-          {origin && distCords ? (
-            <MapViewDirections
-              origin={origin}
-              destination={distCords}
-              apikey={MAP_KEY}
-              mode={"DRIVING"}
-              strokeWidth={5}
-              strokeColor="green"
-            />
-          ) : (
-            ""
-          )}
-        </MapView>
+            {/* {origin && distCords ? (
+              <MapViewDirections
+                origin={origin}
+                destination={distCords}
+                apikey={MAP_KEY}
+                mode={"DRIVING"}
+                strokeWidth={5}
+                strokeColor="green"
+              />
+            ) : (
+              ""
+            )} */}
+          </MapView>
+        ) : (
+          ""
+        )}
       </View>
       <View style={styles.label}>
         <Text>Number of Passengers</Text>
@@ -294,7 +290,7 @@ const styles = StyleSheet.create({
 
   descriptionContainer: {
     flex: 1,
-    justifyContent: 'center',
+    justifyContent: "center",
   },
   itemText: {
     fontSize: 15,
@@ -303,10 +299,9 @@ const styles = StyleSheet.create({
     margin: 2,
   },
   infoText: {
-    textAlign: 'center',
+    textAlign: "center",
     fontSize: 16,
   },
-
 });
 
 const QuantitiySelect = ({ title, action, selected, setSelected }) => {

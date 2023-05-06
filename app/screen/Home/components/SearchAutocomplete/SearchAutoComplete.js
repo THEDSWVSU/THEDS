@@ -21,7 +21,7 @@ export default function SearchAutoComplete({list, setSelected}) {
             let toSearch = inputValue
             trimedValue = trimedValue.toLowerCase()
             toSearch = toSearch.toLocaleLowerCase()
-            if(trimedValue === toSearch){
+            if(trimedValue === toSearch || toSearch === 'all'){
                 return data
             }
         })
@@ -32,12 +32,12 @@ export default function SearchAutoComplete({list, setSelected}) {
         setinputValue(data.name)
         setResult([])
         setTyped(false)
-
-
     }
+
   return (
     <View style = {styles.searchAutoComplete}>
-      <TextInput defaultValue={inputValue} onChangeText = {(e)=>{
+      <TextInput defaultValue={inputValue}  placeholder = "type: 'all' to display all places"
+      onChangeText = {(e)=>{
         setTyped(true)
         setinputValue(e)
       }} style = {styles.searchInput}/>

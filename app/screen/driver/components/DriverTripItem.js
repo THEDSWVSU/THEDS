@@ -1,48 +1,56 @@
 import { Alert, Button, StyleSheet, Text, View } from "react-native";
-import React from "react";
+import React, { useEffect } from "react";
 import axios from "axios";
 import { API_BASE_URL } from "../../../../config";
 
-export default function DriverTripItem({data, type, view, action}) {
-  
+export default function DriverTripItem({ data, type, view, action }) {
+  useEffect(() => {
+    console.log(data);
+  }, [data]);
 
-  if (type === "delivery") return (
-    <View style={styles.main}>
-      <View style={styles.details}>
-      <Text style={styles.title}>
-      {data.firstname + " " + data.middlename + " " + data.lastname}
-        </Text>
-        <Text style={styles.subtitle}>
-          {data.origin} to {data.destination}
-        </Text>
-        <Text style={styles.subtitle}>Distance: {data.distance}km</Text>
-        <Text style={styles.subtitle}>
-          Luggage: {data.small_luggage} small, {data.medium_luggage} medium,{" "}
-          {data.large_luggage} large
-        </Text>
-        <Text style={styles.subtitle}>Fare: PHP {data.price}.00</Text>
-        <Text style={styles.date}>Pickup: {data.pickup_time}</Text>
+  if (type === "delivery")
+    return (
+      <View style={styles.main}>
+        <View style={styles.details}>
+          <Text style={styles.transactionLabel}>{data.transaction_id}</Text>
+          <Text style={styles.title}>
+            {data.firstname + " " + data.middlename + " " + data.lastname}
+          </Text>
+          <Text style={styles.subtitle}>
+            {data.origin} to {data.destination}
+          </Text>
+          <Text style={styles.subtitle}>Distance: {data.distance}km</Text>
+          <Text style={styles.subtitle}>
+            Luggage: {data.small_luggage} small, {data.medium_luggage} medium,{" "}
+            {data.large_luggage} large
+          </Text>
+          <Text style={styles.subtitle}>Fare: PHP {data.price}.00</Text>
+          <Text style={styles.date}>Pickup: {data.pickup_time}</Text>
+        </View>
+        <View style={styles.row}>
+          <Button title="Accept" onPress={() => action(data)} />
+        </View>
       </View>
-      <View style={styles.row}>
-        <Button title="Accept" onPress={()=>action(data)}/>
+    );
+  else
+    return (
+      <View style={styles.main}>
+        <View style={styles.details}>
+          <Text style={styles.transactionLabel}>{data.transaction_id}</Text>
+          <Text style={styles.title}>
+            {data.firstname + " " + data.middlename + " " + data.lastname}
+          </Text>
+          <Text style={styles.subtitle}>
+            Distination: {data.origin} to {data.destination}
+          </Text>
+          <Text style={styles.subtitle}>Pickup Time: {data.pickup_time}</Text>
+          <Text style={styles.date}>{data.date_time}</Text>
+        </View>
+        <View style={styles.row}>
+          <Button title="Accept" onPress={() => action(data)} />
+        </View>
       </View>
-      
-    </View>
-  );
-  else return (
-    <View style={styles.main}>
-      <View style={styles.details}>
-        <Text style={styles.title}>{data.firstname + " " + data.middlename + " " + data.lastname}</Text>
-        <Text style={styles.subtitle}>Distination: {data.origin} to {data.destination}</Text>
-        <Text style={styles.subtitle}>Pickup Time: {data.pickup_time}</Text>
-        <Text style={styles.date}>{data.date_time}</Text>
-      </View>
-      <View style={styles.row}>
-        <Button title="Accept" onPress={()=>action(data)}/>
-      </View>
-      
-    </View>
-  );
+    );
 }
 
 const styles = StyleSheet.create({
@@ -65,6 +73,11 @@ const styles = StyleSheet.create({
     color: "#757575",
   },
   details: {
-    width:"75%"
+    width: "75%",
+  },
+  transactionLabel: {
+    color: "orange",
+    fontWeight: "800",
+    fontSize: 30,
   },
 });
