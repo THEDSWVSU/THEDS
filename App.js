@@ -40,8 +40,10 @@ export default function App() {
       else setInitialRoute("main");
       console.log(accountId);
     }
-    getUser();
+    getUser()
+
   }, []);
+
 
   if (!initialRoute)
     return (

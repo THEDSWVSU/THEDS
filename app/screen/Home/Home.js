@@ -46,12 +46,12 @@ export default function Home({ navigation }) {
 
     return (
       <View style={styles.menu}>
-        <View style={styles.itemContainer}>
+        {/* <View style={styles.itemContainer}>
           <Text style={styles.menuItem}>Profile</Text>
         </View>
         <View style={styles.itemContainer}>
           <Text style={styles.menuItem}>Settings</Text>
-        </View>
+        </View> */}
         <View style={styles.itemContainer} onTouchStart={logout}>
           <Text style={styles.menuItem}>Logout</Text>
         </View>

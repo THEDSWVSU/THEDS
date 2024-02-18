@@ -30,6 +30,7 @@
     "react-native": "0.69.9",
     "react-native-autocomplete-input": "^5.3.2",
     "react-native-datepicker": "^1.7.2",
+    "react-native-dialog": "^9.3.0",
     "react-native-drawer": "^2.5.1",
     "react-native-dropdown-picker": "^5.4.6",
     "react-native-geolocation-service": "^5.3.1",

@@ -179,19 +179,6 @@ export default function CreateTrip({ navigation }) {
           >
              {originCords ? <Marker coordinate={originCords} /> : ""}
             {distCords ? <Marker coordinate={distCords} /> : ""}
-
-            {/* {origin && distCords ? (
-              <MapViewDirections
-                origin={origin}
-                destination={distCords}
-                apikey={MAP_KEY}
-                mode={"DRIVING"}
-                strokeWidth={5}
-                strokeColor="green"
-              />
-            ) : (
-              ""
-            )} */}
           </MapView>
         ) : (
           ""
