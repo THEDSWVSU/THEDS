@@ -4,7 +4,7 @@
     "slug": "TricycleApp",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./app/assets/philippines-tricycle-clipart-png-transparent.png.png",
+    "icon": "./app/assets/philippines-tricycle-clipart-png-transparent.png",
     "userInterfaceStyle": "light",
     "splash": {
       "image": "./app/assets/philippines-tricycle-clipart-png-transparent.png",
@@ -22,7 +22,7 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./app/assets/adaptive-icon.png",
+        "foregroundImage": "./app/assets/favicon.png",
         "backgroundColor": "#FFFFFF"
       },
       "package": "com.theds.drive"
